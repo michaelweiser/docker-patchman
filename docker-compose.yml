@@ -6,10 +6,13 @@ services:
         volumes:
             - app_data:/usr/share/nginx/html/patchman_media:ro
             - ./etc/nginx/conf.d:/etc/nginx/conf.d:ro
+            - ./ssl/private/nginx.pem:/etc/ssl/private/nginx.pem:ro
+            - ./ssl/certs/nginx.pem:/etc/ssl/nginx.pem:ro
+            - ./ssl/cacert.pem:/etc/ssl/cacert.pem:ro
         depends_on:
            - patchman
         ports:
-          - "80:80"
+          - "443:443"
 
     patchman:
         image: patchman
@@ -17,8 +20,6 @@ services:
             - app_data:/patchman/static:rw
         networks:
             - default
-        ports:
-          - "8080:80"
         environment:
           - ADMINNAME=admin
           - ADMINEMAIL=admin@email.com
