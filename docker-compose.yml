@@ -13,6 +13,7 @@ services:
            - patchman
         ports:
           - "443:443"
+          - "8443:8443"
 
     patchman:
         image: patchman
