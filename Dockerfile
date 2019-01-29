@@ -3,7 +3,6 @@ RUN apk --no-cache add git gcc python2-dev libxslt-dev libxml2-dev libc-dev libf
 mkdir /patchman &&\
 pip install whitenoise==3.3.1 &&\
 git clone https://github.com/furlongm/patchman.git /patchman
-ADD ./patchman_override/host_detail.html /patchman/patchman/hosts/templates/hosts/host_detail.html
 RUN cd /patchman && ./setup.py install
 ADD etc/patchman/local_settings.py /etc/patchman/local_settings.py
 ADD entry.sh /entry.sh
