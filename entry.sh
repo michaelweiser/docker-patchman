@@ -11,6 +11,13 @@ for i in ADMINNAME ADMINEMAIL ADMINACC ADMINPW DBNAME DBUSER DBPW DBHOST SECRETK
   fi
 done
 
+zzz=
+while ! patchman-manage test ; do
+  sleep 1
+  zzz=z$zzz
+  echo $zzz | grep zzzzzzzzzz >/dev/null && exit 1
+done
+
 patchman-manage makemigrations
 patchman-manage migrate
 

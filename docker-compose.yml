@@ -12,7 +12,7 @@ services:
           - "80:80"
 
     patchman:
-        image: uqlpatchman
+        image: patchman
         volumes:
             - app_data:/patchman/static:rw
         networks:
@@ -33,9 +33,12 @@ services:
           - mysql
 
     mysql:
-      image: mysql:5.7
+      image: mariadb
       environment:
         - MYSQL_ROOT_PASSWORD=coolpw
+        - MYSQL_DATABASE=patchman
+        - MYSQL_USER=patchman
+        - MYSQL_PASSWORD=coolpw
 
 volumes:
     app_data:
