@@ -1,47 +1,38 @@
-version: '3'
+nginx:
+    image: nginx:stable-alpine
+    volumes:
+        - ./app_data:/usr/share/nginx/html/patchman_media:ro
+        - ./etc/nginx/conf.d:/etc/nginx/conf.d:ro
+        - ./ssl/private/nginx.pem:/etc/ssl/private/nginx.pem:ro
+        - ./ssl/certs/nginx.pem:/etc/ssl/nginx.pem:ro
+        - ./ssl/cacert.pem:/etc/ssl/cacert.pem:ro
+    links:
+       - patchman
+    ports:
+      - "443:443"
+      - "8443:8443"
 
-services:
-    nginx:
-        image: nginx:stable-alpine
-        volumes:
-            - app_data:/usr/share/nginx/html/patchman_media:ro
-            - ./etc/nginx/conf.d:/etc/nginx/conf.d:ro
-            - ./ssl/private/nginx.pem:/etc/ssl/private/nginx.pem:ro
-            - ./ssl/certs/nginx.pem:/etc/ssl/nginx.pem:ro
-            - ./ssl/cacert.pem:/etc/ssl/cacert.pem:ro
-        depends_on:
-           - patchman
-        ports:
-          - "443:443"
-          - "8443:8443"
+patchman:
+    image: patchman
+    volumes:
+        - ./app_data:/patchman/static:rw
+    environment:
+      - ADMINNAME=admin
+      - ADMINEMAIL=admin@email.com
+      - DBNAME=patchman
+      - DBUSER=patchman
+      - DBPW=coolpw
+      - DBHOST=mysql
+      - SECRETKEY=bananarama
+      - ADMINACC=admin
+      - ADMINPW=admin
+    links:
+      - mysql
 
-    patchman:
-        image: patchman
-        volumes:
-            - app_data:/patchman/static:rw
-        networks:
-            - default
-        environment:
-          - ADMINNAME=admin
-          - ADMINEMAIL=admin@email.com
-          - DBNAME=patchman
-          - DBUSER=patchman
-          - DBPW=coolpw
-          - DBHOST=mysql
-          - SECRETKEY=bananarama
-          - ADMINACC=admin
-          - ADMINPW=admin
-        depends_on:
-          - mysql
-
-    mysql:
-      image: mariadb
-      environment:
-        - MYSQL_ROOT_PASSWORD=coolpw
-        - MYSQL_DATABASE=patchman
-        - MYSQL_USER=patchman
-        - MYSQL_PASSWORD=coolpw
-
-volumes:
-    app_data:
-        driver: local
+mysql:
+  image: mariadb
+  environment:
+    - MYSQL_ROOT_PASSWORD=coolpw
+    - MYSQL_DATABASE=patchman
+    - MYSQL_USER=patchman
+    - MYSQL_PASSWORD=coolpw
