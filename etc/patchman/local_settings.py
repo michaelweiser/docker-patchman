@@ -55,3 +55,7 @@ RUN_GUNICORN = True
 #        'LOCATION': '127.0.0.1:11211',
 #    }
 #}
+
+MIDDLEWARE_CLASSES += ( 'django_session_timeout.middleware.SessionTimeoutMiddleware', )
+SESSION_EXPIRE_SECONDS = 3600
+SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
